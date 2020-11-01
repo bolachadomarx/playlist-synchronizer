@@ -16,6 +16,8 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "node/no-path-concat": "off"
+        "node/no-path-concat": "off",
+        "camelcase": "off",
+        "no-useless-constructor": "off"
     }
 }
