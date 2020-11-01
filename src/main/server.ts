@@ -1,8 +1,10 @@
 import express from 'express'
 import setupRoutes from './config/routes'
 import puppeteer from 'puppeteer'
+import setupMiddlewares from './config/middlewares'
 
 const app = express()
+setupMiddlewares(app)
 setupRoutes(app)
 
 const url =
