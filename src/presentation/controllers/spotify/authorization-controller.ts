@@ -1,18 +1,15 @@
-import { Controller, HttpRequest, HttpResponse } from '../../../presentation/protocols'
-import { GetAccessToken } from '../../../domain/spotify/usecases/get-access-token'
-import { serverError, success } from '../../../presentation/helpers/http-helper'
+import { Authorization } from './../../../domain/spotify/usecases/authorization'
+import { success, serverError } from '../../helpers'
+import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
-export class GetAccessTokenController implements Controller {
-  constructor(private readonly getAccessToken: GetAccessToken) {}
+export class AuthorizationController implements Controller {
+  constructor(private authorization: Authorization) {}
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const { grant_type, redirect_uri, code } = httpRequest.body
-      const basic = httpRequest.headers.authorization
+      const code = httpRequest.query.code
+      const accountAccess = await this.authorization.authorize(code)
 
-      const authorization = { grant_type, redirect_uri, code, basic }
-
-      const accessAccountData = await this.getAccessToken.authorize(authorization)
-      return success(accessAccountData)
+      return success(accountAccess)
     } catch (error) {
       return serverError(error)
     }

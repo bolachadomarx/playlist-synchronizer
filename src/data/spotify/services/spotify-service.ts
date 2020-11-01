@@ -1,16 +1,24 @@
-import { AuthorizationModel } from '@/domain/spotify/models/authorization'
-import { GetAccessToken } from '@/domain/spotify/usecases/get-access-token'
-import { StoreAccessCode } from '@/domain/spotify/usecases/store-access-code'
+import { AccountAccessData, AuthorizationModel } from './../../../domain/spotify/models/authorization'
+import { Authorization } from './../../../domain/spotify/usecases/authorization'
 import axios from 'axios'
 import qs from 'qs'
-export class SpotifyService implements StoreAccessCode, GetAccessToken {
+export class SpotifyService implements Authorization {
   spotifyApi = 'https://accounts.spotify.com/api'
 
-  async store(accessCode: string): Promise<string> {
-    return await accessCode
+  async authorize(accessCode: string): Promise<AccountAccessData> {
+    const authorizationData: AuthorizationModel = {
+      grant_type: 'authorization_code',
+      code: accessCode,
+      redirect_uri: 'http://localhost:3000/api/access-code',
+      basic: 'Basic YTgwNzdhMzJhMWU2NGY2MGIwZmVmNGFmMDUwYjNkODc6NzQxZDJkOTE0NTI1NDA1YTllYmFiYjNhMTY1NGZlM2Q=',
+    }
+    console.log(authorizationData)
+
+    const accessAccount = await this.getAccessToken(authorizationData)
+    return accessAccount
   }
 
-  async authorize(authorizationData: AuthorizationModel): Promise<any> {
+  async getAccessToken(authorizationData: AuthorizationModel): Promise<AccountAccessData> {
     const { grant_type, redirect_uri, code, basic } = authorizationData
     const body = { grant_type, redirect_uri, code }
     const config = {
