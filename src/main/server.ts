@@ -2,7 +2,9 @@ import express from 'express'
 import setupRoutes from './config/routes'
 import puppeteer from 'puppeteer'
 import setupMiddlewares from './config/middlewares'
+import * as dotenv from 'dotenv'
 
+dotenv.config()
 const app = express()
 setupMiddlewares(app)
 setupRoutes(app)

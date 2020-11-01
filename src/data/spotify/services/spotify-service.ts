@@ -9,11 +9,9 @@ export class SpotifyService implements Authorization {
     const authorizationData: AuthorizationModel = {
       grant_type: 'authorization_code',
       code: accessCode,
-      redirect_uri: 'http://localhost:3000/api/access-code',
-      basic: 'Basic YTgwNzdhMzJhMWU2NGY2MGIwZmVmNGFmMDUwYjNkODc6NzQxZDJkOTE0NTI1NDA1YTllYmFiYjNhMTY1NGZlM2Q=',
+      redirect_uri: `${process.env.REDIRECT_URI}`,
+      basic: `Basic ${process.env.APP_BASIC}`,
     }
-    console.log(authorizationData)
-
     const accessAccount = await this.getAccessToken(authorizationData)
     return accessAccount
   }
