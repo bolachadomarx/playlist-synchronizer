@@ -2,6 +2,7 @@ export interface AuthorizationModel {
   grant_type: string
   code: string
   redirect_uri: string
+  basic: string
 }
 
 export interface AccountAccessData {
